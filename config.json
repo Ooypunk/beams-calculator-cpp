@@ -1,0 +1,14 @@
+{
+	"materials": {
+		"path": "docs/materials.csv"
+	},
+	"parts": {
+		"path": "docs/parts.csv"
+	},
+	"config": {
+		"saw_width": 3,
+		"import": {
+			"separator": ";"
+		}
+	}
+}
