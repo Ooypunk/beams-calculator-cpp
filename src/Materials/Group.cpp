@@ -63,8 +63,7 @@ class Group {
 			this->indexed = indexed;
 		}
 
-		// @debug
-		void setScenariosX(vector<Scenario> scenarios) {
+		void setScenarios(vector<Scenario> scenarios) {
 			this->scenarios = scenarios;
 		}
 
