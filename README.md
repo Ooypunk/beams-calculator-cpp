@@ -9,7 +9,7 @@ Note: this is with https://github.com/nlohmann/json installed using vcpkg.
 ./main config.json
 
 ## To do
-- Find out why program is killed on line Main@
+- Calculator returns and expects groups-vector: should be a pointer to that same vector
 - Make import (for both Parts and Materials) fully configurable in config.json
 -- general import settings in "config", overrides in "parts" or "materials"
 - CPU usage is now dosed by using usleep(), but number of microseconds are fixed now: this should be flexible, depending on the machine it is running on

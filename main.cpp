@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 	writeElapsedTime(start);
 
 	cout << "Calculate which scenario's have the least waste\n";
-	vector<Scenario> scenarios = calculator.getLeastWasteScenarios();
+	vector<Scenario> scenarios = calculator.getLeastWasteScenarios(groups);
 
 	writeElapsedTime(start);
 

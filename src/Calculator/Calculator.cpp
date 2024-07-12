@@ -83,7 +83,7 @@ class Calculator {
 			return this->scenarios_count;
 		}
 
-		void fillScenarios(vector<Group> groups) {
+		void fillScenarios(vector<Group> &groups) {
 			// Fill scenarios with "indexed": for each group, add scenario's for all
 			// "indexed" entries, filled with materials and parts (according to
 			// their respective "indexed" entry)
@@ -93,7 +93,7 @@ class Calculator {
 			this->calcScenariosInGroups(groups);
 		}
 
-		vector<Scenario> getLeastWasteScenarios() {
+		vector<Scenario> getLeastWasteScenarios(vector<Group> groups) {
 			vector<Scenario> scenarios;
 			for(Group group: groups) {
 				vector<Scenario> filtered_scenarios = group.getScenariosWithoutExceptions();
@@ -148,7 +148,7 @@ class Calculator {
 
 						if (count % 1000 == 0) {
 							cout << "." << std::flush;
-							usleep(2000000);
+							usleep(500000);
 						}
 						count++;
 					}
