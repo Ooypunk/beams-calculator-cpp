@@ -16,7 +16,15 @@ class Calculator {
 			this->materials_list = materials_list;
 		}
 
-		vector<Group> calcAndGetGroups() {
+		int getGroupsCount() {
+			return this->groups.size();
+		}
+
+		int getScenariosCount() {
+			return this->scenarios_count;
+		}
+
+		void calcAndLoadGroups() {
 			// Get materials store, grouped on width and height
 			this->grouped_store.loadMaterialsList(this->materials_list);
 
@@ -28,11 +36,11 @@ class Calculator {
 			}
 
 			// Now get these groups (materials/parts combinations)
-			return this->grouped_store.getGroupsWithParts();
+			this->groups = this->grouped_store.getGroupsWithParts();
 		}
 
-		void addPartitionsToGroups(vector<Group> &groups) {
-			for(Group &group: groups) {
+		void addPartitionsToGroups() {
+			for(Group &group: this->groups) {
 				int nr_of_parts = group.getPartsCount();
 				int nr_of_matrs = group.getMaterialsCount();
 
@@ -50,8 +58,8 @@ class Calculator {
 			}
 		}
 
-		void addIndexationToGroups(vector<Group> &groups) {
-			for(Group &group: groups) {
+		void addIndexationToGroups() {
+			for(Group &group: this->groups) {
 				IdExpander expander;
 				vector<vector<int>> partitions = group.getPartitions();
 				vector<vector<vector<int>>> expanded_partitions = expander.expand(partitions);
@@ -59,9 +67,9 @@ class Calculator {
 			}
 		}
 
-		void addScenariosToGroups(vector<Group> &groups) {
+		void addScenariosToGroups() {
 			this->scenarios_count = 0;
-			for(Group &group: groups) {
+			for(Group &group: this->groups) {
 				for(vector<vector<int>> index_arr: group.getIndexed()) {
 					Scenario scenario;
 					scenario.setIndexed(index_arr);
@@ -75,27 +83,21 @@ class Calculator {
 				}
 			}
 			cout << this->scenarios_count << "\n" << std::flush;
-			usleep(70000);
 		}
 
-
-		int getNumberOfScenarios() {
-			return this->scenarios_count;
-		}
-
-		void fillScenarios(vector<Group> &groups) {
+		void fillScenarios() {
 			// Fill scenarios with "indexed": for each group, add scenario's for all
 			// "indexed" entries, filled with materials and parts (according to
 			// their respective "indexed" entry)
-			this->fillScenariosInGroups(groups);
+			this->fillScenariosInGroups();
 
 			// Calculate waste ratios
-			this->calcScenariosInGroups(groups);
+			this->calcScenariosInGroups();
 		}
 
-		vector<Scenario> getLeastWasteScenarios(vector<Group> groups) {
+		vector<Scenario> getLeastWasteScenarios() {
 			vector<Scenario> scenarios;
-			for(Group group: groups) {
+			for(Group group: this->groups) {
 				vector<Scenario> filtered_scenarios = group.getScenariosWithoutExceptions();
 
 				sort(filtered_scenarios.begin(), filtered_scenarios.end(), this->sortLeastWaste);
@@ -117,9 +119,9 @@ class Calculator {
 		 * @param vector<Group> &groups
 		 * @return void
 		 */
-		void fillScenariosInGroups(vector<Group> &groups) {
+		void fillScenariosInGroups() {
 			int count = 0;
-			for(Group &group: groups) {
+			for(Group &group: this->groups) {
 				vector<Material> materials = group.getMaterials();
 				vector<Part> parts = group.getParts();
 				vector<Scenario> scenarios = group.getScenarios();
@@ -158,8 +160,8 @@ class Calculator {
 			cout << count << "\n";
 		}
 
-		void calcScenariosInGroups(vector<Group> &groups) {
-			for(Group &group: groups) {
+		void calcScenariosInGroups() {
+			for(Group &group: this->groups) {
 			   vector<Scenario> scenarios = group.getScenarios();
 			   for(Scenario &scenario: scenarios) {
 				   scenario.runCalc();

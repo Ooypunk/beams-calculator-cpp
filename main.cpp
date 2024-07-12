@@ -112,35 +112,35 @@ int main(int argc, char** argv) {
 	cout << "Init Calculator\n";
 	Calculator calculator(parts_list, materials_list);
 	cout << "Materialen en delen groeperen\n";
-	vector<Group> groups = calculator.calcAndGetGroups();
-	cout << "Aantal groepen: " << groups.size() << "\n";
+	calculator.calcAndLoadGroups();
+	cout << "Aantal groepen: " << calculator.getGroupsCount() << "\n";
 	writeElapsedTime(start);
 
 	// Add partitions list to each
 	cout << "Partities toevoegen aan groepen\n";
-	calculator.addPartitionsToGroups(groups);
+	calculator.addPartitionsToGroups();
 	writeElapsedTime(start);
 
 	// Add indexation list to each
 	cout << "Indexaties toevoegen aan groepen\n";
-	calculator.addIndexationToGroups(groups);
+	calculator.addIndexationToGroups();
 	writeElapsedTime(start);
 
 	// Fill scenarios with "indexed": for each group, add scenario's for all
 	// "indexed" entries, filled with materials and parts (according to
 	// their respective "indexed" entry)
 	cout << "Voeg scenario's toe aan groepen\n";
-	calculator.addScenariosToGroups(groups);
+	calculator.addScenariosToGroups();
 	writeElapsedTime(start);
 
 	cout << "Scenario's vullen met materialen and delen\n";
-	cout << "Aantal scenario's: " << to_string(calculator.getNumberOfScenarios()) << "\n";
+	cout << "Aantal scenario's: " << to_string(calculator.getScenariosCount()) << "\n";
 
-	calculator.fillScenarios(groups);
+	calculator.fillScenarios();
 	writeElapsedTime(start);
 
 	cout << "Calculate which scenario's have the least waste\n";
-	vector<Scenario> scenarios = calculator.getLeastWasteScenarios(groups);
+	vector<Scenario> scenarios = calculator.getLeastWasteScenarios();
 
 	writeElapsedTime(start);
 
