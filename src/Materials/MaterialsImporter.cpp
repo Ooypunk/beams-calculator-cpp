@@ -8,6 +8,7 @@ class MaterialsImporter: public BaseImporter {
 			Register& register_obj = Register::getInstance();
 			string separator = register_obj.getMaterialsImportSeparator();
 			string filename = register_obj.getMaterialsFilename();
+			std::map<std::string, std::string> mapping = register_obj.getMaterialsImportMapping();
 
 			std::ifstream input{filename};
 
@@ -54,7 +55,7 @@ class MaterialsImporter: public BaseImporter {
 				}
 
 				if (is_first) {
-					this->setHeaderRow(row);
+					this->setHeaderRow(row, mapping);
 					is_first = false;
 					continue;
 				}

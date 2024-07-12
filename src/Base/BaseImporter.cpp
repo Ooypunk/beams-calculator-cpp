@@ -5,7 +5,7 @@ class BaseImporter {
 	protected:
 		vector<string> header_row;
 
-		void setHeaderRow(vector<string> header_row) {
+		void setHeaderRow(vector<string> header_row, std::map<std::string, std::string> mapping) {
 			if (header_row.size() <= 1) {
 				throw HeaderTooSmall("0 of 1 cellen in header, er gaat iets mis: check het scheidingskarakter");
 			}
@@ -19,7 +19,29 @@ class BaseImporter {
 				trimmed.push_back(cell);
 			}
 
-			this->header_row = trimmed;
+			vector<string> translated;
+			for(string cell: trimmed) {
+				string mapped = this->getMappedHeaderCell(cell, mapping);
+				translated.push_back(mapped);
+			}
+
+			this->header_row = translated;
+		}
+
+		string getMappedHeaderCell(string cell, std::map<std::string, std::string> mapping) {
+			std::map< std::string, std::string >::iterator MyIterMap; 
+			MyIterMap = mapping.begin(); 
+
+			while(MyIterMap != mapping.end() ) {
+				std::string key = (*MyIterMap).first; 
+
+				if (mapping[key] == cell) {
+					return key;
+				}
+				MyIterMap++;
+			}
+
+			return "not found";
 		}
 
 		int getLengthFromRow(vector<string> row) {

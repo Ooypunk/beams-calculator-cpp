@@ -9,6 +9,7 @@ class PartsImporter: public BaseImporter {
 			Register& register_obj = Register::getInstance();
 			string separator = register_obj.getPartsImportSeparator();
 			string filename = register_obj.getPartsFilename();
+			std::map<std::string, std::string> mapping = register_obj.getPartsImportMapping();
 
 			std::ifstream input{filename};
 
@@ -28,13 +29,13 @@ class PartsImporter: public BaseImporter {
 				std::istringstream ss(std::move(line));
 				vector<string> row;
 
-				// std::getline can split on other characters, here we use ','
+				// use std::getline to split line on a character (indicated by separator) into parts
 				for (string value; std::getline(ss, value, separator[0]);) {
 					row.push_back(std::move(value));
 				}
 
 				if (is_first) {
-					this->setHeaderRow(row);
+					this->setHeaderRow(row, mapping);
 					is_first = false;
 					continue;
 				}
